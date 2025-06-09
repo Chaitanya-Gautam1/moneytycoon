@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Money Tycoon - Incremental Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-title">💰 Money Tycoon</h1>
+            <div class="nav-buttons">
+                <button class="nav-btn active" onclick="showPage('game')">Game</button>
+                <button class="nav-btn" onclick="showPage('upgrades')">Upgrades</button>
+                <button class="nav-btn" onclick="showPage('achievements')">Achievements</button>
+                <button class="nav-btn" onclick="showPage('settings')">Settings</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Game Page -->
+    <div id="game-page" class="page active">
+        <div class="game-container">
+            <div class="stats-panel">
+                <div class="money-display">
+                    <h2>💵 Money: $<span id="money">0.00</span></h2>
+                    <p>💸 Per Second: $<span id="per-second">0.00</span></p>
+                    <p>🏦 Total Earned: $<span id="total-earned">0.00</span></p>
+                </div>
+                
+                <div class="prestige-section">
+                    <h3>⭐ Prestige System</h3>
+                    <p>Prestige Points: <span id="prestige-points">0</span></p>
+                    <p>Multiplier: <span id="prestige-multiplier">1.00</span>x</p>
+                    <button onclick="prestige()" class="prestige-btn" id="prestige-btn" disabled>
+                        Prestige (Requires $1M)
+                    </button>
+                </div>
+            </div>
+
+            <div class="main-button-container">
+                <button id="main-button" onclick="clickButton()" class="main-btn">
+                    <span class="button-text">💰 Click for Money!</span>
+                    <span class="click-value">+$<span id="click-value">1.00</span></span>
+                </button>
+            </div>
+
+            <div class="quick-stats">
+                <div class="stat-item">
+                    <span>👆 Total Clicks:</span>
+                    <span id="total-clicks">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>⏰ Time Played:</span>
+                    <span id="time-played">0s</span>
+                </div>
+                <div class="stat-item">
+                    <span>🎯 Click Power:</span>
+                    <span>$<span id="click-power-display">1.00</span></span>
+                </div>
+                <div class="stat-item">
+                    <span>🤖 Businesses:</span>
+                    <span id="total-businesses">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upgrades Page -->
+    <div id="upgrades-page" class="page">
+        <div class="upgrades-container">
+            <h2>🏪 Business Empire</h2>
+            
+            <div class="upgrade-category">
+                <h3>👆 Click Upgrades</h3>
+                <div class="upgrades-grid">
+                    <div class="upgrade-card" id="click-upgrade">
+                        <h4>💪 Stronger Fingers</h4>
+                        <p>Increase money per click</p>
+                        <p class="cost">Cost: $<span id="click-cost">25</span></p>
+                        <p class="level">Level: <span id="click-level">0</span></p>
+                        <button onclick="buyUpgrade('click')" class="upgrade-btn">Buy Upgrade</button>
+                    </div>
+                    
+                    <div class="upgrade-card" id="crit-upgrade">
+                        <h4>🎯 Critical Clicks</h4>
+                        <p>5% chance for 10x click value</p>
+                        <p class="cost">Cost: $<span id="crit-cost">500</span></p>
+                        <p class="level">Level: <span id="crit-level">0</span></p>
+                        <button onclick="buyUpgrade('crit')" class="upgrade-btn">Buy Upgrade</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="upgrade-category">
+                <h3>🏢 Businesses</h3>
+                <div class="upgrades-grid">
+                    <div class="upgrade-card business-card" id="lemonade-upgrade">
+                        <h4>🍋 Lemonade Stand</h4>
+                        <p>Generates $1/sec</p>
+                        <p class="cost">Cost: $<span id="lemonade-cost">100</span></p>
+                        <p class="owned">Owned: <span id="lemonade-owned">0</span></p>
+                        <button onclick="buyBusiness('lemonade')" class="upgrade-btn">Buy Business</button>
+                    </div>
+                    
+                    <div class="upgrade-card business-card" id="pizza-upgrade">
+                        <h4>🍕 Pizza Shop</h4>
+                        <p>Generates $8/sec</p>
+                        <p class="cost">Cost: $<span id="pizza-cost">1100</span></p>
+                        <p class="owned">Owned: <span id="pizza-owned">0</span></p>
+                        <button onclick="buyBusiness('pizza')" class="upgrade-btn">Buy Business</button>
+                    </div>
+                    
+                    <div class="upgrade-card business-card" id="arcade-upgrade">
+                        <h4>🕹️ Arcade</h4>
+                        <p>Generates $47/sec</p>
+                        <p class="cost">Cost: $<span id="arcade-cost">12000</span></p>
+                        <p class="owned">Owned: <span id="arcade-owned">0</span></p>
+                        <button onclick="buyBusiness('arcade')" class="upgrade-btn">Buy Business</button>
+                    </div>
+                    
+                    <div class="upgrade-card business-card" id="oil-upgrade">
+                        <h4>🛢️ Oil Company</h4>
+                        <p>Generates $260/sec</p>
+                        <p class="cost">Cost: $<span id="oil-cost">130000</span></p>
+                        <p class="owned">Owned: <span id="oil-owned">0</span></p>
+                        <button onclick="buyBusiness('oil')" class="upgrade-btn">Buy Business</button>
+                    </div>
+                    
+                    <div class="upgrade-card business-card" id="bank-upgrade">
+                        <h4>🏦 Investment Bank</h4>
+                        <p>Generates $1400/sec</p>
+                        <p class="cost">Cost: $<span id="bank-cost">1400000</span></p>
+                        <p class="owned">Owned: <span id="bank-owned">0</span></p>
+                        <button onclick="buyBusiness('bank')" class="upgrade-btn">Buy Business</button>
+                    </div>
+                    
+                    <div class="upgrade-card business-card" id="space-upgrade">
+                        <h4>🚀 Space Program</h4>
+                        <p>Generates $7800/sec</p>
+                        <p class="cost">Cost: $<span id="space-cost">20000000</span></p>
+                        <p class="owned">Owned: <span id="space-owned">0</span></p>
+                        <button onclick="buyBusiness('space')" class="upgrade-btn">Buy Business</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Achievements Page -->
+    <div id="achievements-page" class="page">
+        <div class="achievements-container">
+            <h2>🏆 Achievements</h2>
+            <div class="achievements-grid" id="achievements-grid">
+                <!-- Achievements will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Page -->
+    <div id="settings-page" class="page">
+        <div class="settings-container">
+            <h2>⚙️ Settings</h2>
+            
+            <div class="settings-section">
+                <h3>🎨 Themes</h3>
+                <div class="themes-grid">
+                    <div class="theme-card active" data-theme="default" onclick="changeTheme('default')">
+                        <div class="theme-preview default-theme">
+                            <div class="theme-circle"></div>
+                            <div class="theme-bar"></div>
+                        </div>
+                        <h4>Default</h4>
+                    </div>
+                    
+                    <div class="theme-card" data-theme="dark" onclick="changeTheme('dark')">
+                        <div class="theme-preview dark-theme">
+                            <div class="theme-circle"></div>
+                            <div class="theme-bar"></div>
+                        </div>
+                        <h4>Dark Mode</h4>
+                    </div>
+                    
+                    <div class="theme-card" data-theme="neon" onclick="changeTheme('neon')">
+                        <div class="theme-preview neon-theme">
+                            <div class="theme-circle"></div>
+                            <div class="theme-bar"></div>
+                        </div>
+                        <h4>Neon Glow</h4>
+                    </div>
+                    
+                    <div class="theme-card" data-theme="retro" onclick="changeTheme('retro')">
+                        <div class="theme-preview retro-theme">
+                            <div class="theme-circle"></div>
+                            <div class="theme-bar"></div>
+                        </div>
+                        <h4>Retro Wave</h4>
+                    </div>
+                    
+                    <div class="theme-card" data-theme="voidlight" onclick="changeTheme('voidlight')">
+                        <div class="theme-preview voidlight-theme">
+                            <div class="theme-circle"></div>
+                            <div class="theme-bar"></div>
+                        </div>
+                        <h4>Voidlight Theme</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3>💾 Game Data</h3>
+                <div class="controls-grid">
+                    <button onclick="saveGame()" class="control-btn">💾 Save Game</button>
+                    <button onclick="loadGame()" class="control-btn">📁 Load Game</button>
+                    <button onclick="exportSave()" class="control-btn">📤 Export Save</button>
+                    <button onclick="importSave()" class="control-btn">📥 Import Save</button>
+                    <button onclick="resetGame()" class="control-btn danger">🗑️ Reset Game</button>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3>📊 Statistics</h3>
+                <div class="stats-display">
+                    <div class="stat-row">
+                        <span>Session Time:</span>
+                        <span id="session-time">0s</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Money Per Click:</span>
+                        <span>$<span id="stats-click-value">1.00</span></span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Money Per Second:</span>
+                        <span>$<span id="stats-per-second">0.00</span></span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Total Clicks:</span>
+                        <span id="stats-total-clicks">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notifications" class="notifications"></div>
+
+    <!-- Import Modal -->
+    <div id="import-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeImportModal()">&times;</span>
+            <h2>📥 Import Save Data</h2>
+            <textarea id="import-data" placeholder="Paste your save data here..." rows="10"></textarea>
+            <div class="form-actions">
+                <button onclick="doImport()" class="submit-btn">Import</button>
+                <button onclick="closeImportModal()" class="cancel-btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
